@@ -85,6 +85,7 @@ typings/
 rev
 temp
 dist
-build/*
+
+*.build.js
 
 

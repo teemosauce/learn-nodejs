@@ -41,7 +41,7 @@ reader.on('error', err => {
 function addComments(content) {
     var newContents = comments + content;
 
-    var writer = fs.createWriteStream(__dirname + '/build/test.comment.js', {
+    var writer = fs.createWriteStream(__dirname + '/asset/test.build.js', {
         encoding: 'utf-8'
     })
     writer.write(newContents);
