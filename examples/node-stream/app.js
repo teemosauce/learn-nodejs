@@ -4,6 +4,9 @@ var fs = require('fs')
 const entry = __dirname + '/asset/test.js'
 const output = __dirname + '/asset/test.build.js'
 
+/**
+ * 获取当前时间戳的一段注释代码
+ */
 function getComments() {
     return `
     /**
@@ -14,6 +17,8 @@ function getComments() {
     */
 `
 }
+
+// 读取源文件的流
 var reader = fs.createReadStream(entry, {
     // encoding: 'utf-8'
 });
