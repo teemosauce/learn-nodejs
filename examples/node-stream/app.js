@@ -1,21 +1,26 @@
 var log = require('../log')
 var fs = require('fs')
 
-var comments = `
+const entry = __dirname + '/asset/test.js'
+const output = __dirname + '/asset/test.build.js'
+
+function getComments() {
+    return `
     /**
     *
     * author: yanpengli
     * year: 2019
+    * date: ${new Date().toLocaleString()}
     */
 `
-
-var reader = fs.createReadStream(__dirname + '/asset/test.js', {
+}
+var reader = fs.createReadStream(entry, {
     // encoding: 'utf-8'
 });
 
 var jsContent = '';
 reader.on('open', () => {
-    log.m("reader open")
+    // log.m("reader open")
 })
 
 reader.on('data', data => {
@@ -23,11 +28,15 @@ reader.on('data', data => {
 })
 
 reader.on('end', () => {
-    addComments(jsContent)
+    // 先删除文件
+    fs.unlink(output, err => {
+        addComments(jsContent)
+    });
+
 })
 
 reader.on('close', () => {
-    log.m("reader close")
+    // log.m("reader close")
 })
 
 reader.on('error', err => {
@@ -39,16 +48,16 @@ reader.on('error', err => {
  * @param {*} content 
  */
 function addComments(content) {
-    var newContents = comments + content;
-
-    var writer = fs.createWriteStream(__dirname + '/asset/test.build.js', {
+    var writer = fs.createWriteStream(output, {
         encoding: 'utf-8'
     })
-    writer.write(newContents);
-    writer.end();
+    // 先写入注释
+    writer.write(getComments());
+    // 写入原来的内容
+    writer.end(content);
 
     writer.on('finish', () => {
-        log.m("writer finish")
+        log.m("写入注释信息成功！")
     })
 
     writer.on('error', error => {
