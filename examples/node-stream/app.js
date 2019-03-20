@@ -41,12 +41,11 @@ reader.on('error', err => {
 function addComments(content) {
     var newContents = comments + content;
 
-    var writer = fs.createWriteStream(__dirname + '/asset/test.comment.js', {
+    var writer = fs.createWriteStream(__dirname + '/build/test.comment.js', {
         encoding: 'utf-8'
     })
     writer.write(newContents);
     writer.end();
-    
 
     writer.on('finish', () => {
         log.m("writer finish")
