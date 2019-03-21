@@ -1,5 +1,4 @@
-
-var Log = require('../log')
+var log = require('../log')
 /**
  * 空函数
  */
@@ -44,12 +43,18 @@ var Class = {
         // 重新包装一下initialize 方法 让该方法的只能执行一次
         var initialize = Fun.prototype.initialize || noop
         Fun.prototype.initialize = function () {
-            if (!this.initialized) {
+            if (!this.$initialized) {
                 initialize.apply(this, arguments);
-                this.initialized = true;
-                Log.m("初次实例化", arguments)
+                this.$initialized = true;
+
+                Object.defineProperty(this, '$initialized', {
+                    configurable: false,
+                    value: true,
+                    writable: false
+                })
+                log.m("初次实例化", arguments)
             } else {
-                Log.m("实例化函数只能执行一次")
+                log.m("实例化函数只能执行一次")
             }
         }
         return Fun
@@ -111,18 +116,25 @@ var Taxi = Class.create(Car, {
     }
 })
 var car1 = new Car("红色");
-Log.m("这是一辆汽车car1", car1.getColor())
+log.m("这是一辆汽车car1", car1.getColor())
 var car2 = new Car("绿色");
-Log.m("这是一辆汽车car2", car2.getColor())
+log.m("这是一辆汽车car2", car2.getColor())
 
 car1.addItem("b")
 car1.addItem("c")
 
 /** car2 并没有添加Item 但是却能取到和car1一样的结果 */
-Log.m("car1 items:", car1.getItems())
-Log.m("car2 items:", car2.getItems())
+log.m("car1 items:", car1.getItems())
+log.m("car2 items:", car2.getItems())
 
 
 var taxi1 = new Taxi("黑色", "京B04583")
 
-Log.m("这是一辆出租车", taxi1.getColor() + taxi1.getNo())
+log.m("这是一辆出租车", taxi1.getColor() + taxi1.getNo())
+
+taxi1.$initialized = false
+
+log.m('在外部赋值false 并不成功', taxi1.$initialized)
+taxi1.initialize()
+
+log.m(taxi1)
