@@ -37,9 +37,7 @@ function viewsMiddleware(
                     })
                 } else {
                     const engineName = map && map[suffix] ? map[suffix] : suffix
-
                     const render = engineSource[engineName]
-
                     if (!engineName || !render)
                         return Promise.reject(
                             new Error(`Engine not found for the ".${suffix}" file extension`)
@@ -52,6 +50,7 @@ function viewsMiddleware(
                             debug('using `pretty` package to beautify HTML')
                             html = pretty(html)
                         }
+                        // 定义源码 这里不直接返回 只返回render结果 自己控制返回给客户端
                         // ctx.body = html
 
                         return Promise.resolve(html)

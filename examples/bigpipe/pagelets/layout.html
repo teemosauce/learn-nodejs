@@ -7,13 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BigPipe示例演示</title>
 
-    <script src="static/js/bigpipe.js"></script>
-
-    <script>
-        function onPageletLoaded(id, source) {
-            document.getElementById(id).innerHTML = source
-        }
-    </script>
+    <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
 
     <style>
         body,
@@ -72,6 +66,20 @@
 
         </div>
     </div>
+
+    <script src="static/js/bigpipe.js"></script>
+
+    <script>
+        var bigpipe = new Bigpipe();
+
+        bigpipe.ready('pagelet1', html => {
+            document.querySelector('#pagelet1').innerHTML = html
+        })
+
+        bigpipe.ready('pagelet2', html => {
+            document.querySelector('#pagelet2').innerHTML = html
+        })
+    </script>
 </body>
 
 </html>

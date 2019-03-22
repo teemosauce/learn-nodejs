@@ -9,9 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "consolidate": "^0.15.1",
+    "debug": "^4.1.1",
+    "get-paths": "0.0.4",
+    "handlebars": "^4.1.1",
     "koa": "^2.7.0",
     "koa-bigpipe": "^1.0.9",
+    "koa-body": "^4.1.0",
+    "koa-send": "^5.0.0",
+    "koa-static": "^5.0.0",
     "koa-views": "^6.1.5",
+    "pretty": "^2.0.0",
     "redis": "^2.8.0"
   }
 }
