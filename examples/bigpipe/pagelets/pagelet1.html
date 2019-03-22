@@ -1,0 +1,28 @@
+ 
+ <script>
+     onPageletLoaded('pagelet1', `<style>
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <div>
+        <ul id="list">
+            <li>我是pagelet1</li>
+            <li>我是pagelet1</li>
+            <li>我是pagelet1</li>
+        </ul>
+    </div>
+
+    <script>
+        console.log(1111111)
+        (function () {
+            console.log("添加事件")
+            document.querySelector("#list").addEventListener('click', () => {
+                alert("ul click!");
+            })
+        })()
+    <\/script>`)
+ </script>

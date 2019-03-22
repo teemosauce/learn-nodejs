@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BigPipe示例演示</title>
+
+    <script src="static/js/bigpipe.js"></script>
+
+    <script>
+        function onPageletLoaded(id, source) {
+            document.getElementById(id).innerHTML = source
+        }
+    </script>
+
+    <style>
+        body,
+        html {
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            background: grey;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .layout {
+            background: yellowgreen;
+        }
+
+
+
+        .pagelet1 {
+            float: left;
+            border: 10px solid rebeccapurple;
+            margin: 10px 0 0 10px;
+        }
+
+        .pagelet2 {
+            float: right;
+            border: 5px solid blue;
+            margin: 10px 10px 0 0;
+        }
+
+        .layout::after {
+            display: block;
+            content: '';
+            clear: both;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        这是一个BigPipe的例子
+    </header>
+    <div class="layout">
+        <div id="pagelet1" class="pagelet1">
+
+        </div>
+
+        <div id="pagelet2" class="pagelet2">
+
+        </div>
+    </div>
+</body>
+
+</html>

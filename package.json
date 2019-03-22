@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "koa": "^2.7.0",
+    "koa-bigpipe": "^1.0.9",
+    "koa-views": "^6.1.5",
     "redis": "^2.8.0"
   }
 }
