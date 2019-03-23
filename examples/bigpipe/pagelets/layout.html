@@ -29,18 +29,27 @@
             background: yellowgreen;
         }
 
-
+        .loading {
+            background-color: #fff;
+            background-image: url(static/images/loading.gif);
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
 
         .pagelet1 {
             float: left;
             border: 10px solid rebeccapurple;
             margin: 10px 0 0 10px;
+            height: 300px;
+            width: 400px;
         }
 
         .pagelet2 {
             float: right;
             border: 5px solid blue;
             margin: 10px 10px 0 0;
+            width: 100px;
+            height: 200px;
         }
 
         .layout::after {
@@ -58,26 +67,36 @@
         这是一个BigPipe的例子
     </header>
     <div class="layout">
-        <div id="pagelet1" class="pagelet1">
+        <div id="pagelet1" class="pagelet1 loading">
 
         </div>
 
-        <div id="pagelet2" class="pagelet2">
+        <div id="pagelet2" class="pagelet2 loading">
 
         </div>
     </div>
+
+    <div style="height:1000px;"></div>
 
     <script src="static/js/bigpipe.js"></script>
 
     <script>
         var bigpipe = new Bigpipe();
 
+        function hideLoading(el) {
+            el.className = el.className.replace("loading", "")
+        }
+
         bigpipe.ready('pagelet1', html => {
-            document.querySelector('#pagelet1').innerHTML = html
+            var selector = document.querySelector('#pagelet1')
+            selector.innerHTML = html
+            hideLoading(selector)
         })
 
         bigpipe.ready('pagelet2', html => {
-            document.querySelector('#pagelet2').innerHTML = html
+            var selector = document.querySelector('#pagelet2')
+            selector.innerHTML = html
+            hideLoading(selector)
         })
     </script>
 </body>

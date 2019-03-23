@@ -69,7 +69,7 @@ app.use(async ctx => {
     // console.log("render片段1结束并返回给客户端")
     // var html1 = addToBigpipe('pagelet1', str1)
     // ctx.write(html1)
-   
+
     // console.log("render片段2")
     // var str2 = await ctx.render('./pagelet2/pagelet2.hbs')
     // console.log("render片段2结束并返回给客户端")
@@ -79,32 +79,32 @@ app.use(async ctx => {
 
     // ctx.end()
 
-//     //2. Promise的串行加载 有bug 不知道什么问题
-//     console.log("render片段1")
-//     var str2 = await ctx.render('./pagelet1/pagelet1.hbs').then(function(str1){
-//         var html1 = addToBigpipe('pagelet1', str1);
-//         ctx.write(html1)
-//         console.log("render片段1结束并返回给客户端")
-//         console.log("render片段2")
-//         return ctx.render('./pagelet2/pagelet2.hbs')
-//     })
+    //     //2. Promise的串行加载 有bug 不知道什么问题
+    //     console.log("render片段1")
+    //     var str2 = await ctx.render('./pagelet1/pagelet1.hbs').then(function(str1){
+    //         var html1 = addToBigpipe('pagelet1', str1);
+    //         ctx.write(html1)
+    //         console.log("render片段1结束并返回给客户端")
+    //         console.log("render片段2")
+    //         return ctx.render('./pagelet2/pagelet2.hbs')
+    //     })
 
-//    // 改用下面的方法可以
-//     var html2 = addToBigpipe('pagelet2', str2)
-//     ctx.write(html2)
-//     ctx.write('<script src="pagelets/pagelet2/pagelet2.js"></script>')
+    //    // 改用下面的方法可以
+    //     var html2 = addToBigpipe('pagelet2', str2)
+    //     ctx.write(html2)
+    //     ctx.write('<script src="pagelets/pagelet2/pagelet2.js"></script>')
 
-//     // 关闭连接
-//     ctx.end()
+    //     // 关闭连接
+    //     ctx.end()
 
     //3. 修改成并行处理 谁先render完就先返回
     console.log("render片段1")
-    var promise1 = waitQueryData(1000, {
+    var promise1 = waitQueryData(3000, {
         title: '数据库数据'
-    }).then(function(data){
+    }).then( data=> {
         ctx.state.title = data.title
         return ctx.render('./pagelet1/pagelet1.hbs')
-    }).then(function (html) {
+    }).then( html=> {
         console.log("render片段1结束并返回给客户端")
         html = addToBigpipe('pagelet1', html)
         ctx.write(html)
@@ -114,17 +114,19 @@ app.use(async ctx => {
         return Promise.reject(false)
     })
     console.log("render片段2")
-    var promise2 = ctx.render('./pagelet2/pagelet2.hbs').then(function (html) {
-            console.log("render片段2结束并返回给客户端")
-            html = addToBigpipe('pagelet2', html)
-            ctx.write(html)
-            ctx.write('<script src="pagelets/pagelet2/pagelet2.js"></script>')
-            return Promise.resolve(true)
-        }, () => {
-            console.log("返回pagelet2发生错误")
-            return Promise.reject(false)
-        })
-    
+    var promise2 = waitQueryData(2000, {}).then( data=> {
+        return ctx.render('./pagelet2/pagelet2.hbs')
+    }).then( html=> {
+        console.log("render片段2结束并返回给客户端")
+        html = addToBigpipe('pagelet2', html)
+        ctx.write(html)
+        ctx.write('<script src="pagelets/pagelet2/pagelet2.js"></script>')
+        return Promise.resolve(true)
+    }, () => {
+        console.log("返回pagelet2发生错误")
+        return Promise.reject(false)
+    })
+
     // 用await的方式才没有bug 用then的方式会提示在写之前已经关闭了ctx
     await Promise.all([promise1, promise2])
     console.log("请求结束 关闭连接")
@@ -176,9 +178,9 @@ function readFileContent(filename) {
 /**
  * 模仿一个异步查询数据的方法
  */
-function waitQueryData(ms, data){
-    return new Promise(function(resolve){
-        setTimeout(function(){
+function waitQueryData(ms, data) {
+    return new Promise(function (resolve) {
+        setTimeout(function () {
             resolve(data)
         }, ms || 2000)
     })
