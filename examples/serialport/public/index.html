@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>波形图模拟绘制</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="./lib/echarts.min.js"></script>
+    <style>
+        #mChart {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="resetBtn">重置</button>
+    <div id="mChart">
+
+    </div>
+
+    <script type="text/javascript">
+        var mChart = echarts.init(document.getElementById('mChart'))
+
+        let socket = io('http://localhost:8080')
+
+        socket.on('data', data => {
+            let xData = [],
+                yData = []
+
+            data.forEach(item => {
+                xData.push(item[1])
+                yData.push(item[0])
+            })
+            mChart.setOption({
+                xAxis: {
+                    type: 'category',
+                    data: xData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: yData,
+                    type: 'line'
+                }]
+            })
+        })
+
+        document.querySelector('#resetBtn').addEventListener('click', () => {
+            socket.emit('reset')
+        })
+    </script>
+</body>
+
+</html>
