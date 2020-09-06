@@ -14,7 +14,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "get-paths": "0.0.4",
-    "handlebars": "^4.1.1",
+    "handlebars": "^4.5.3",
     "koa": "^2.7.0",
     "koa-bigpipe": "^1.0.9",
     "koa-body": "^4.1.0",
