@@ -14,7 +14,12 @@ function toHex(str) {
 }
 // console.log(crypto.getHashes())
 
+function a() {
+    let bytes = crypto.randomBytes(8)
 
-console.log(toHex('1'))
-console.log(toHex('a0HSFGAc'))
-console.log(toHex('yduasyuid'))
+    console.log(bytes)
+
+    console.log(bytes.toString('hex'))
+}
+
+a()
