@@ -1,8 +1,11 @@
 var fs = require('fs')
 var zlib = require('zlib')
+var http = require('http')
 
 var txtName = '/assets/test.txt'
 var gzName = txtName + '.gz'
+
+
 
 //1. 压缩文件
 // gzip()
