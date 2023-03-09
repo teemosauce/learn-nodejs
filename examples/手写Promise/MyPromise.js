@@ -132,13 +132,12 @@ MyPromise.all = (promises) => {
   return new MyPromise((resolve, reject) => {
     let results = [];
 
-    let done = 0;
+    let time = 0;
     let promisesLength = promises.length;
     function allDone(index, result) {
       results[index] = result;
-      done++;
-      console.log(done, promisesLength);
-      if (done == promisesLength) {
+      time++;
+      if (time == promisesLength) {
         resolve(results);
       }
     }
@@ -155,56 +154,24 @@ MyPromise.all = (promises) => {
   });
 };
 
-p = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    // reject("登录失败");
-    resolve("登录成功");
-  }, 1000);
-});
-
-let p1 = p
-  .then(
-    function A1(result) {
-      let promise = new MyPromise((resolve, reject) => {
-        setTimeout(() => {
-          console.log("获取数据成功");
-          reject("数据");
-        }, 2000);
-      });
-      return promise;
-    },
-    function A2(err) {
-      console.log("A2" + err);
+MyPromise.race = (promises) => {
+  return new Promise((resolve, reject) => {
+    for (let i = 0, len = promises.length; i < len; i++) {
+      let promise = promises[i];
+      if (!isPromise(promise)) {
+        promise = Promise.resolve(promise);
+      }
+      promise.then(resolve, reject);
     }
-  )
-  .then(
-    function A3(result) {
-      console.log("渲染成功" + result);
-    },
-    function A4(err) {
-      console.log("渲染失败" + err);
-    }
-  );
-
-p.then(
-  function B1(result) {
-    console.log("B" + result);
-  },
-  function B2(err) {
-    console.log("B2" + err);
-  }
-);
-
-// setTimeout(() => {
-//   console.log(p);
-// }, 3000);
+  });
+};
 
 let pa = new Promise((resolve, reject) => {
   let n = 0;
   let interval = setInterval(() => {
     if (n == 5) {
       clearInterval(interval);
-      reject("PA打印完成");
+      resolve("PA任务完成");
     }
     console.log("PA每秒打印一次");
     n++;
@@ -216,18 +183,27 @@ let pb = new Promise((resolve) => {
   let interval = setInterval(() => {
     if (n == 20) {
       clearInterval(interval);
-      resolve("PB打印完成");
+      resolve("PB任务完成");
     }
     console.log("PB每秒打印二次");
     n++;
   }, 500);
 });
 
-MyPromise.all([pa, pb]).then(
+// MyPromise.all([pa, pb]).then(
+//   (result) => {
+//     console.log("所有任务完成", result);
+//   },
+//   (err) => {
+//     console.log("有任务出现错误", err);
+//   }
+// );
+
+MyPromise.race([pa, pb]).then(
   (result) => {
-    console.log(result);
+    console.log("有任务完成", result);
   },
   (err) => {
-    console.log("错误", err);
+    console.log("有任务失败", err);
   }
 );
